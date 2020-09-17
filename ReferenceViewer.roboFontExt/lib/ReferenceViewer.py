@@ -144,9 +144,11 @@ class Controller:
             removeObserver(self, 'currentGlyphChanged')
             removeObserver(self, 'drawPreview')
             removeObserver(self, 'draw')
+            removeObserver(self, 'drawInactive')
         else:
             addObserver(self, 'currentGlyphChanged', 'currentGlyphChanged')
             addObserver(self, 'glyphWindowDraw', 'draw')
+            addObserver(self, 'glyphWindowDraw', 'drawInactive')
             addObserver(self, 'glyphWindowDraw', 'drawPreview')
             
         self.observers = not self.observers
