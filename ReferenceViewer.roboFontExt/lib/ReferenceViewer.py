@@ -94,11 +94,13 @@ class Controller:
 
     def __init__(self):
         self.settings = []
-        addObserver(self, "buttonToolBar", "glyphWindowWillShowToolbarItems")
-        self.settingsWindow = SettingsWindow(self)
-        self.drawer = GlyphWindowDrawer(self)
         self.observers = False
         self.activ = False
+        self.settingsWindow = SettingsWindow(self)
+        self.drawer = GlyphWindowDrawer(self)
+        addObserver(self, "buttonToolBar", "glyphWindowWillShowToolbarItems")
+
+        
 
     def buttonToolBar(self, info):
         toolbarItems = info["toolbarItems"]
@@ -257,11 +259,16 @@ class SettingsWindow:
             drawFocusRing=False,
         )
         self.w.sizeSlider = Slider(
-            (10, 160, -10, 20),
+            (10, 160, -60, 20),
             minValue=10,
             maxValue=2000,
             value=300,
             callback=self.sizeSliderCallback,
+        )
+        self.w.sizeValue = EditText(
+            (-60, 160, -10, 20),
+            300,
+            callback=self.sizeValueCallback,
         )
         self.w.sizeSlider.show(0)
         self.w.colorBox = ColorWell((10, 185, -10, -10), callback=self.colorBoxCallback)
@@ -327,6 +334,16 @@ class SettingsWindow:
 
     def sizeSliderCallback(self, sender):
         self.font.size = sender.get()
+        self.w.sizeValue = self.font.size
+        UpdateCurrentGlyphView()
+
+    def sizeValueCallback(self, sender):
+        value = sender.get()
+        try:
+            self.font.size = float(value)
+            self.w.sizeSlider.set(self.font.size)
+        except:
+            sender.set(self.font.size)
         UpdateCurrentGlyphView()
 
 
